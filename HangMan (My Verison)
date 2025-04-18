@@ -1,0 +1,340 @@
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Libraries
+import time
+import random
+import os
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Global Variables
+user_name = ""
+secret_word = ""
+lives = 8
+list_word = []
+
+    ["exaction", 8],
+    ["dissension", 8],
+    ["enigmatic", 8],
+    ["perplexed", 6],
+    ["seraphim", 8],
+
+             ]  # No capital letters
+runnning = True
+wrong_guesses = []
+word_guess = ""
+guessed = []
+correct_count = 0
+attempt = True
+choice = ""
+index = 0
+
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Subprograms
+def introduction():  # Introduces the user to the game. Asks the user for the name of the person they are
+    print("-" * 75)  # Going to kill
+    name = input("Please enter the name of the person going to be hanged: ")
+    return name
+
+
+def unkown_word(lists):  # Function generates a random name from list_word, selects it, and returns it.
+    global index
+    index = random.randint(0, len(list_word) - 1)
+    word = (lists[index][0])
+    return word
+
+
+def zero_life():  # Prints a picture of a hangman with no lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      | x x | \n"
+          f" |      |  ^  |          This is {user_name}. \n"
+          f" |       -----           He is hanged.\n"
+          f" |         |             You lost.\n"
+          f" |       --+--           {user_name} is dead because of you.\n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |       --+-- \n"
+          f" |"
+          f"________________ \n")
+
+
+def one_life():  # Prints a picture of a hangman with one lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      | ' ' | \n"
+          f" |      |     |          Speak no evil. \n"
+          f" |       -----           {user_name} would like to cry.\n"
+          f" |         |             But has no mouth.\n"
+          f" |       --+--           Would you like to give him one?\n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |       --+-- \n"
+          f" |"
+          f"________________ \n")
+
+
+def two_life():  # Prints a picture of a hangman with two lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          Face is everything. \n"
+          f" |       -----           It is used to convey expressions.\n"
+          f" |         |             {user_name} is scared.\n"
+          f" |       --+--           But you can't see that.\n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |       --+-- \n"
+          f" |"
+          f"________________ \n")
+
+
+def three_life():  # Prints a picture of a hangman with three lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          Fear often \n"
+          f" |       -----           mock people with disabilties. \n"
+          f" |         |             Mock {user_name} . \n"
+          f" |       --+--           He cannot approuch you. \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         +-- \n"
+          f" |"
+          f"________________ \n")
+
+
+def four_life():  # Prints a picture of a hangman with four lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          {user_name} can't run. \n"
+          f" |       -----           {user_name} can't hide. \n"
+          f" |         |             Shhhhh... it will be over soon. \n"
+          f" |       --+--           Like another lifeless corpse. \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         + \n"
+          f" |"
+          f"________________ \n")
+
+
+def five_life():  # Prints a picture of a hangman with four lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          Look at {user_name} \n"
+          f" |       -----           Imagine the agony if he wakes up. \n"
+          f" |         |             Knock knock, \n"
+          f" |         +--           {user_name} woke up. \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         + \n"
+          f" |"
+          f"________________ \n")
+
+
+def six_life():  # Prints a picture of a hangman with four lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          A body is nothing without it's organs. \n"
+          f" |       -----           Tress are nothing without it's leafs. \n"
+          f" |         |             You are nothing \n"
+          f" |         +             If you don't save {user_name} \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         | \n"
+          f" |         + \n"
+          f" |"
+          f"________________ \n")
+
+
+def seven_life():  # Prints a picture of a hangman with four lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |       ----- \n"
+          f" |      |     | \n"
+          f" |      |     |          There is a head. \n"
+          f" |       -----           From heaven or hell, \n"
+          f" |                       Fragments of {user_name} start to appear. \n"
+          f" |                       Do not make me wake him. \n"
+          f" |          \n"
+          f" |          \n"
+          f" |          \n"
+          f" |          \n"
+          f" |"
+          f"________________ \n")
+
+
+def eight_life():  # Prints a picture of a hangman with four lives.
+    print(f"============== \n"
+          f" |         |   \n"
+          f" |             \n"
+          f" |              \n"
+          f" |                       The grave of {user_name} \n"
+          f" |                       is prepared. \n"
+          f" |                       Look at it, \n"
+          f" |                       It will be your fault. \n"
+          f" |          \n"
+          f" |          \n"
+          f" |          \n"
+          f" |          \n"
+          f" |"
+          f"________________ \n")
+
+
+def drawing(number):  # Embedded Function to return a function
+    if number == 8:
+        return eight_life()
+    elif number == 7:
+        return seven_life()
+    elif number == 6:
+        return six_life()
+    elif number == 5:
+        return five_life()
+    elif number == 4:
+        return four_life()
+    elif number == 3:
+        return three_life()
+    elif number == 2:
+        return two_life()
+    else:
+        return one_life()
+
+
+def clue_of_word_identification(choice_word, listing):
+    print("Your word means: ")
+    if choice_word == listing[0][0]:
+        print("A form of demanding and obtaining something from someone.")
+    elif choice_word == listing[1][0]:
+        print("Disagreement leading to a lack of harmony.")
+    elif choice_word == listing[2][0]:
+        print("Difficult to understand or interpret, often mysterious.")
+    elif choice_word == listing[3][0]:
+        print("Completely puzzled.")
+    elif choice_word == listing[4][0]:
+        print("A celestial or heavenly being with extrodinary powers.")
+    time.sleep(2)
+
+
+def hangman(TheWord, guess, correct_word):  # Steps to show the lenght of TheWord
+
+    correct_word.append(guess)
+
+    print("Progress: ", end="")
+    for letter in TheWord:
+        if letter.lower() in correct_word:
+            print(letter, end=" ")
+        else:
+            print("_", end=" ")
+
+    return guess
+
+
+def checking(letterS):
+    for _ in secret_word:
+        if letterS in secret_word:
+            return True
+        else:
+            return False
+
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Main program
+
+while runnning:  # While game is running, keep on running.
+
+    user_name = introduction()  # The value of function will be set to the variable: user_name
+    secret_word = unkown_word(list_word)  # The value of function will be set the variable: secret_word
+
+    wrong_guesses = []  # Redeclared the variables to make sure that when the player...
+    guessed = []  # plays again, the data would be reset.
+    lives = 8  # Same here .
+    correct_count = 0
+
+    while lives != 0 and correct_count != list_word[index][1]:  # While the player has not lost and not win
+        attempt = True
+        print("=" * 75)
+        clue_of_word_identification(secret_word, list_word)
+        print(f"You have {lives} lives left.")
+        time.sleep(2)  # Pauses the program
+        drawing(lives)  # Draws current hangman status
+        time.sleep(2)
+
+        print(f"Word length: {len(secret_word)} letter(s)")
+        print(f"Wrong guesses:", wrong_guesses)
+        print(f"Guesses:", guessed)
+
+        while attempt:
+            word_guess = input("\nWhat character would you like to guess? --> ")
+            word_guess = word_guess.lower()
+
+            if word_guess in guessed:
+                print("This word is already guessed. Try again.")
+                attempt = True
+
+            elif len(word_guess) > 1:
+                print("Guess only ONE character please")
+                attempt = True
+
+            elif word_guess.isdigit():
+                print("No numbers allowed please.")
+                attempt = True
+
+            else:
+                attempt = False
+
+        letter = hangman(secret_word, word_guess, guessed)
+        print("\n")
+        print("-" * 75)
+
+        if checking(letter):
+            print(f"\nYour letter, {letter}, is correct!")
+            time.sleep(2)
+            correct_count += 1
+
+        else:
+            print(f"\nYour letter, {letter}, is wrong!")
+            time.sleep(2)
+            wrong_guesses.append(letter)
+            lives -= 1
+
+    if lives == 0:
+        print(f"Game Over! The word was: {secret_word}! {user_name} is hanged.")
+        choice = input("Try again? (y/n): ")
+        choice.lower()
+
+        if choice == "y":
+            runnning = True
+        else:
+            running = False
+
+    elif correct_count == len(secret_word):
+        print(f"Congrats! You win and saved {user_name}!")
+        choice = input("Try again? (y/n): ")
+        choice.lower()
+
+        if choice == "y":
+            runnning = True
+        else:
+            running = False
+
+
+print("Thank you for playing!")
